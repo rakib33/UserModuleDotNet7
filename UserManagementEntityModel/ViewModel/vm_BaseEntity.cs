@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace UserManagementEntityModel
+namespace UserManagementEntityModel.ViewModel
 {
-   public class vm_BaseEntity
+    public class vm_BaseEntity
     {
         [StringLength(36)]
         public string CreatedDate { get; set; }

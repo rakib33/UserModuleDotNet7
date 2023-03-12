@@ -21,4 +21,10 @@
     <ProjectReference Include="..\..\UserManagementEntityModel\UserManagementEntityModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Services\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
+
 </Project>
