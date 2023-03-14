@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 using UserManagementCore.Filters;
 using UserManagementCore.Interfaces;
+using UserManagementCore.Models;
 using UserManagementCore.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,7 +13,10 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
 
 #region Add_DI_ApplicationServices
+builder.Services.AddScoped<IRepository<ApplicationRoleDetails>, RepositoryRoleDetails>();
 builder.Services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
+builder.Services.AddScoped<IApplicationUserService, UserManagementService>();
+builder.Services.AddScoped<IApplicationRoleDetailsService, ApplicationRoleDetailsService>();
 builder.Services.AddTransient<MyActionFilters>();
 #endregion
 

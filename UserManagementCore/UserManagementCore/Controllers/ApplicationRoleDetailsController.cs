@@ -13,11 +13,12 @@ namespace UserManagementCore.Controllers
     public class ApplicationRoleDetailsController : ControllerBase
     {
         private readonly IApplicationRoleDetailsService _ApplicationRoleDetailsService;      
-        private readonly UserManagementService _UserManagementService;
+        private readonly IApplicationUserService _UserManagementService;
         // private readonly IRepository<ApplicationRoleDetails> _ApplicationRoleDetails;
         private readonly ILogger<ApplicationRoleDetailsController> _logger;
 
-        public ApplicationRoleDetailsController(ILogger<ApplicationRoleDetailsController> logger, IApplicationRoleDetailsService ApplicationRoleDetailsService, UserManagementService UserManagementService)
+        public ApplicationRoleDetailsController(ILogger<ApplicationRoleDetailsController> logger, 
+            IApplicationRoleDetailsService ApplicationRoleDetailsService, IApplicationUserService UserManagementService)
         {
             _ApplicationRoleDetailsService = ApplicationRoleDetailsService;
             //  _ApplicationRoleDetails = ApplicationRoleDetails;

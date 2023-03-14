@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using UserManagementCore.Common;
+using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 
 namespace UserManagementCore.Repositories
 {
     //https://stackoverflow.com/questions/59608828/how-to-add-user-to-role-using-userid-and-roleid-of-asp-net-core-identity
-    public class UserManagementService
+    public class UserManagementService : IApplicationUserService
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
