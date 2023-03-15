@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagementCore", "UserM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserManagementEntityModel", "..\UserManagementEntityModel\UserManagementEntityModel.csproj", "{DCD7BA34-3EC8-41E6-924E-D6B024C20D10}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UserManagementCore.Tests", "UserManagementCore.Tests\UserManagementCore.Tests.csproj", "{D872F3F0-4778-49A0-ABAE-646082FB22D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{DCD7BA34-3EC8-41E6-924E-D6B024C20D10}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DCD7BA34-3EC8-41E6-924E-D6B024C20D10}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DCD7BA34-3EC8-41E6-924E-D6B024C20D10}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D872F3F0-4778-49A0-ABAE-646082FB22D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D872F3F0-4778-49A0-ABAE-646082FB22D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D872F3F0-4778-49A0-ABAE-646082FB22D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D872F3F0-4778-49A0-ABAE-646082FB22D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
