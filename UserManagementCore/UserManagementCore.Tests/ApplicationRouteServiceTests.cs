@@ -28,5 +28,18 @@ namespace UserManagementCore.Tests
             Assert.Equal(request.Id, response.Id);
         
         }
+
+        [Fact]
+        public void ShouldThrowExceptionIfRequestIsNull()
+        {
+            // Arrange  
+            var processor = new ApplicationRouteServices();
+
+            // Act  
+            var exception = Assert.Throws<ArgumentNullException>(() => processor.CreateApplicationRoute(null));
+
+            // Assert  
+            Assert.Equal("request", exception.ParamName);
+        }
     }
 }
