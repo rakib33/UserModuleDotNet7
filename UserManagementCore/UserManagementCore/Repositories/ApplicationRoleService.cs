@@ -32,7 +32,7 @@ namespace UserManagementCore.Repositories
                 return await _roleManager.Roles.Include(userRole => userRole.UserRoles)
                                                                        .Include(roleDetails => roleDetails.RoleDetails)
                                                                        .Include(roleClaims => roleClaims.RoleClaims).ToListAsync();
-            }
+            }            
             catch (Exception ex)
             {
                 throw ex;

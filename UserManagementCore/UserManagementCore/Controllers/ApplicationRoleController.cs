@@ -32,17 +32,17 @@ namespace UserManagementCore.Controllers
         [ServiceFilter(typeof(MyActionFilters))]
         public async Task<ActionResult<List<ApplicationRole>>> Get()
         {
-            //try
-            //{
-            throw new ApplicationException();
-            _logger.LogInformation("[ApplicationRole]-> Get event fire.");
-            return Ok(new { title = AppStatus.SuccessStatus, data = await _ApplicationRoleService.GetRoleList() });
+            try
+            {
+               // throw new ApplicationException();
+                _logger.LogInformation("[ApplicationRole]-> Get event fire.");
+                return Ok(new { title = AppStatus.SuccessStatus, data = await _ApplicationRoleService.GetRoleList() });
 
-            //}
-            //catch (Exception ex)
-            //{
-            //    return Ok(new { title = AppStatus.ErrorStatus,data= ex });
-            //}
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { title = AppStatus.ErrorStatus, data = ex });
+            }
 
         }
 

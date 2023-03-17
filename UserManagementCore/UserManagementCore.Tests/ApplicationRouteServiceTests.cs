@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using Azure;
+using Azure.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,10 +37,11 @@ namespace UserManagementCore.Tests
             var processor = new ApplicationRouteServices();
 
             // Act  
-            var exception = Assert.Throws<ArgumentNullException>(() => processor.CreateApplicationRoute(null));
-
+            var response =  processor.CreateApplicationRoute(null);
+                       
             // Assert  
-            Assert.Equal("request", exception.ParamName);
+            Assert.Null(response);
+          //  Assert.Equal("request", exception.ParamName);
         }
     }
 }

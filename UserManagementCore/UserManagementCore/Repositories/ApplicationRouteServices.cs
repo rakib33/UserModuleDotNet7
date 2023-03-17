@@ -1,14 +1,17 @@
-﻿using UserManagementCore.Models;
+﻿using Azure.Core;
+using UserManagementCore.Interfaces;
+using UserManagementCore.Models;
 
 namespace UserManagementCore.Repositories
 {
-    public class ApplicationRouteServices
+    public class ApplicationRouteServices : IApplicationRouteServices
     {
-
-        public ApplicationRouteServices() { 
-        }
-        public ApplicationMenu CreateApplicationRoute(ApplicationMenu applicationMenu) 
+        public ApplicationMenu CreateApplicationRoute(ApplicationMenu applicationMenu)
         {
+            if (applicationMenu is null)
+            {
+                return null;
+            }
             return applicationMenu;
         }
     }
