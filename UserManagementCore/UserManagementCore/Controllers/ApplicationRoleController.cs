@@ -20,6 +20,21 @@ namespace UserManagementCore.Controllers
             _logger = logger;
         }
 
+        [HttpGet("GetTask")]
+        public async Task<ActionResult> GetTask()  //IEnumerable<WeatherForecast>
+        {
+            //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            //{
+            //    Date = DateTime.Now.AddDays(index),
+            //    TemperatureC = Random.Shared.Next(-20, 55),
+            //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
+            //})
+            //.ToArray();
+            List<testItems> tems = new List<testItems>();
+            tems.Add(new testItems { id = 1, idk = "other stuff" });
+            tems.Add(new testItems { id = 2, idk = "not good at naming stuff" });
+            return Ok(new { testItems = tems });
+        }
         /// <summary>
         /// api/ApplicationRole 
         /// api/ApplicationRole/RoleList
