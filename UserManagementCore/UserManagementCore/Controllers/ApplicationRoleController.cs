@@ -30,10 +30,11 @@ namespace UserManagementCore.Controllers
             //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
             //})
             //.ToArray();
-            List<testItems> tems = new List<testItems>();
-            tems.Add(new testItems { id = 1, idk = "other stuff" });
-            tems.Add(new testItems { id = 2, idk = "not good at naming stuff" });
-            return Ok(new { testItems = tems });
+            List<TestItems> tems = new List<TestItems>();
+            tems.Add(new TestItems { id = 1, idk = "reactJs" });
+            tems.Add(new TestItems { id = 2, idk = "This is reactJs" });
+          //  return Ok(new { data = tems, message="This is Test Items" }); // data stored in testItems object 
+            return Ok( tems); // direct array render so in reactjs can catch this
         }
         /// <summary>
         /// api/ApplicationRole 
