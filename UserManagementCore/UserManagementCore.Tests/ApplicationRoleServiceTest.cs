@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using UserManagementCore.Common;
 using UserManagementCore.Models;
+using UserManagementCore.Repositories;
 
 namespace UserManagementCore.Tests
 {
@@ -12,15 +17,41 @@ namespace UserManagementCore.Tests
     public class ApplicationRoleServiceTest
     {
         protected readonly ApplicationDbContext _context;
-
-        public ApplicationRoleServiceTest() 
+        private readonly IServiceProvider serviceProvider;
+        public ApplicationRoleServiceTest()
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
-            _context = new ApplicationDbContext(options);
 
+            var services = new ServiceCollection();
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseInMemoryDatabase(databaseName: "UserManagement_db"));
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+            serviceProvider = services.BuildServiceProvider();
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().Options;
+
+            //_context = new ApplicationDbContext(options);
             //_context.Database.EnsureCreated();
         }
 
+        [Fact]
+        public async Task TestGetRoleList()
+        {
+            // Arrange
+            var roleManager = serviceProvider.GetService<RoleManager<ApplicationRole>>();
+            var roleName = "TestRole";
+            var roleService = new ApplicationRoleService(roleManager);
+            // Act
+            // var result = roleManager.CreateAsync(new IdentityRole(roleName)).Result;
+            var result = roleService.GetRoleList();
+
+            // Assert     
+            var okResult = Assert.IsType<OkObjectResult>(result);
+            var response = Assert.IsType<Dictionary<string, object>>(okResult.Value);
+          //  Assert.Equal(AppStatus.SuccessStatus, response["title"]);
+
+            var data = Assert.IsType<List<ApplicationRole>>(response["data"]);
+            Assert.NotEmpty(data);
+        }
         //[Fact]
         //public async Task GetAllAsync_ReturnTodoCollection()
         //{
@@ -36,7 +67,20 @@ namespace UserManagementCore.Tests
         //    /// Assert
         //    result.Should().HaveCount(TodoMockData.GetTodos().Count);
         //}
+      
+        //public void TestCreateRole()
+        //{
+        //    // Arrange
+        //    var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+        //    var roleName = "TestRole";
 
+        //    // Act
+        //    var result = roleManager.CreateAsync(new IdentityRole(roleName)).Result;
+
+        //    // Assert
+        //    Assert.IsTrue(result.Succeeded);
+        //    Assert.IsNotNull(roleManager.FindByNameAsync(roleName).Result);
+        //}
         public void Dispose()
         {
             _context.Database.EnsureDeleted();

@@ -45,14 +45,15 @@ namespace UserManagementCore.Controllers
         [HttpGet("RoleList")]
         [ResponseCache(Duration = 60)] //60 sec
         //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-        [ServiceFilter(typeof(MyActionFilters))]
+      //  [ServiceFilter(typeof(MyActionFilters))]
         public async Task<ActionResult<List<ApplicationRole>>> Get()
         {
             try
             {
-               // throw new ApplicationException();
-                _logger.LogInformation("[ApplicationRole]-> Get event fire.");
-                return Ok(new { title = AppStatus.SuccessStatus, data = await _ApplicationRoleService.GetRoleList() });
+                // throw new ApplicationException();
+                //_logger.LogInformation("[ApplicationRole]-> Get event fire.");
+                var roleList = await _ApplicationRoleService.GetRoleList();
+                return Ok(new { title = AppStatus.SuccessStatus, data = roleList });
 
             }
             catch (Exception ex)
