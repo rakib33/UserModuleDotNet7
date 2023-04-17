@@ -26,7 +26,14 @@ builder.Services.AddCors(options =>
             builder.AllowAnyOrigin();
         });
 });
-builder.Services.AddIdentity<ApplicationUser,ApplicationRole>()
+builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opts => {
+    opts.Password.RequiredLength = 6;
+    opts.Password.RequireNonAlphanumeric = true;
+    opts.Password.RequireDigit = true;
+    opts.Password.RequireLowercase = true;
+    opts.Password.RequireUppercase = true;
+    //opts.Password.RequiredUniqueChars = 1;
+    })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
