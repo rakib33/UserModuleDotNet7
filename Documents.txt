@@ -2,3 +2,17 @@ https://medium.com/@samueleresca/unit-testing-asp-net-core-identity-e2b18254cc8a
 https://gunnarpeipman.com/aspnet-core-test-controller-fake-user/
 ---------------Mock----------------------
 https://dev.to/cloudx/moq-vs-nsubstitute-who-is-the-winner-40gi
+--------------------------
+To check performance issues in .NET Core, you can use a variety of tools and techniques. Here are a few options:
+
+Profiling tools: There are various profiling tools available for .NET Core, such as JetBrains dotTrace, Microsoft Performance Profiler, and ANTS Performance Profiler. These tools help you identify performance bottlenecks in your code by measuring the execution time of each method and pinpointing the methods that take the longest time to execute.
+
+Code analysis tools: You can use code analysis tools like SonarQube or Roslyn Analyzers to identify performance issues in your code. These tools can help you find code that can be optimized, such as inefficient loops, unnecessary object allocations, or excessive memory usage.
+
+Logging: Logging is another way to identify performance issues. By logging important metrics such as execution time, memory usage, and CPU usage, you can identify areas of your application that are consuming too many resources.
+
+Benchmarking: Benchmarking is a technique that involves running performance tests on specific code snippets or methods. By comparing the execution time of different implementations of the same code, you can identify which implementation is more performant and optimize accordingly.
+
+Load testing: Load testing involves simulating a large number of users or requests to your application to identify performance bottlenecks under heavy load. There are various load testing tools available, such as Apache JMeter, Gatling, and LoadRunner.
+
+Overall, the key to identifying performance issues in .NET Core is to use a combination of these tools and techniques and to analyze the results to find areas of your application that can be optimized.
