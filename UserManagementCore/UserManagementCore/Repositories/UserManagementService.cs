@@ -18,7 +18,7 @@ namespace UserManagementCore.Repositories
             _userManager = userManager;
         }
 
-        public async Task CreateRolesandUsers()
+        public async Task CreateRolesAndUsers()
         {
 
             bool x = await _roleManager.RoleExistsAsync(AppStatus.Role_Admin);

@@ -44,6 +44,11 @@ builder.Services.AddControllers(options => {
 /* [Caching]*/
 builder.Services.AddResponseCaching();
 
+// TODO: Inject custom validation 
+// services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
+// services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
+
 builder.Services.AddScoped<IRepository<ApplicationRoleDetails>, RepositoryRoleDetails>();
 builder.Services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
 builder.Services.AddScoped<IApplicationUserService, UserManagementService>();

@@ -106,7 +106,7 @@ namespace UserManagementCore.Controllers
         {
             try
             {
-                await _UserManagementService.CreateRolesandUsers();
+                await _UserManagementService.CreateRolesAndUsers();
                 return true;
             }
             catch (Exception)
