@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using UserManagementCore.Contexts;
 using UserManagementCore.Infrastructure.ErrorHandler;
 using UserManagementCore.Interfaces;
-using UserManagementCore.Models;
 using UserManagementEntityModel.Models;
-using IErrorHandler = UserManagementCore.Interfaces.IErrorHandler;
+
 
 namespace UserManagementCore.Repositories
 {

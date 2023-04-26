@@ -3,7 +3,11 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using UserManagementCore.Contexts;
+using UserManagementCore.DataContext;
 using UserManagementCore.Filters;
+using UserManagementCore.Infrastructure.ErrorHandler;
+using UserManagementCore.Infrastructure.Mapper;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 using UserManagementCore.Repositories;
@@ -37,6 +41,9 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opts => {
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+//Add Mapping
+builder.Services.AddAutoMapper(typeof(MapperConfig));
+
 //add global exception filter upon controller
 builder.Services.AddControllers(options => {
     options.Filters.Add(typeof(MyExceptionFilters));
@@ -54,6 +61,7 @@ builder.Services.AddScoped<IApplicationRoleService, ApplicationRoleService>();
 builder.Services.AddScoped<IApplicationUserService, UserManagementService>();
 builder.Services.AddScoped<IApplicationRoleDetailsService, ApplicationRoleDetailsService>();
 builder.Services.AddScoped<IApplicationRouteServices, ApplicationRouteServices>();
+builder.Services.AddScoped<IErrorHandler, ErrorHandler>();
 builder.Services.AddTransient<MyActionFilters>();
 #endregion
 
