@@ -31,8 +31,8 @@ namespace UserManagementCore.Controllers
             //})
             //.ToArray();
             List<TestItems> tems = new List<TestItems>();
-            tems.Add(new TestItems { Id = 1, Name = "reactJs" });
-            tems.Add(new TestItems { Id = 2, Name = "This is reactJs" });
+            tems.Add(new TestItems { id = 1, idk = "reactJs" });
+            tems.Add(new TestItems { id = 2, idk= "This is reactJs" });
           //  return Ok(new { data = tems, message="This is Test Items" }); // data stored in testItems object 
             return Ok( tems); // direct array render so in reactjs can catch this
         }
