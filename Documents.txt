@@ -16,3 +16,5 @@ Benchmarking: Benchmarking is a technique that involves running performance test
 Load testing: Load testing involves simulating a large number of users or requests to your application to identify performance bottlenecks under heavy load. There are various load testing tools available, such as Apache JMeter, Gatling, and LoadRunner.
 
 Overall, the key to identifying performance issues in .NET Core is to use a combination of these tools and techniques and to analyze the results to find areas of your application that can be optimized.
+
+https://www.c-sharpcorner.com/article/asp-net-core-crud-with-reactjs-and-entity-framework-core/
