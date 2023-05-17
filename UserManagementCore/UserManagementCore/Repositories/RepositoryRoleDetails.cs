@@ -1,4 +1,5 @@
-﻿using UserManagementCore.Interfaces;
+﻿using UserManagementCore.Contexts;
+using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 
 namespace UserManagementCore.Repositories
