@@ -17,5 +17,9 @@ Load testing: Load testing involves simulating a large number of users or reques
 
 Overall, the key to identifying performance issues in .NET Core is to use a combination of these tools and techniques and to analyze the results to find areas of your application that can be optimized.
 
+
 --------------------------- Configure with SonarQube-----------------
 https://www.youtube.com/watch?v=Mhj36wE2CtU
+
+https://www.c-sharpcorner.com/article/asp-net-core-crud-with-reactjs-and-entity-framework-core/
+
