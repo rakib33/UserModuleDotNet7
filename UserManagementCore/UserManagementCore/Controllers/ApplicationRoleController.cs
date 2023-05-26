@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using UserManagementCore.Common;
 using UserManagementCore.Filters;
 using UserManagementCore.Interfaces;
@@ -44,8 +46,8 @@ namespace UserManagementCore.Controllers
         [HttpGet]
         [HttpGet("RoleList")]
         [ResponseCache(Duration = 60)] //60 sec
-        //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
-      //  [ServiceFilter(typeof(MyActionFilters))]
+       // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [ServiceFilter(typeof(MyActionFilters))]
         public async Task<ActionResult<List<ApplicationRole>>> Get()
         {
             try

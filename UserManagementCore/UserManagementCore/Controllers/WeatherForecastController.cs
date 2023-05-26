@@ -17,6 +17,10 @@ namespace UserManagementCore.Controllers
 
         private readonly ILogger<WeatherForecastController> _logger;
 
+        // The Web API will only accept tokens 1) for users, and 2) having the "access_as_user" scope for this API    
+        static readonly string[] scopeRequiredByApi = new string[] { "ReadWriteAccess" };
+
+
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
@@ -25,6 +29,8 @@ namespace UserManagementCore.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            HttpContext.VerifyUserHasAnyAcceptedScope(scopeRequiredByApi);
+
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),

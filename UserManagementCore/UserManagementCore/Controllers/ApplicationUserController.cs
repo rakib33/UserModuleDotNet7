@@ -7,6 +7,7 @@ using System.Security.Claims;
 using UserManagementCore.Infrastructure.ErrorHandler;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
+using UserManagementEntityModel.ViewModel;
 
 namespace UserManagementCore.Controllers
 {
@@ -29,11 +30,14 @@ namespace UserManagementCore.Controllers
         //    var destination = _mapper.Map<SourceType, DestinationType>(source);
         //}
 
+
         [HttpGet]
         public List<ApplicationUser> Get()
         {
            IQueryable<ApplicationUser> user = _usersService.Get();
             return user.ToList();
+
+            //Microsoft.Data.SqlClient.SqlException: 'A network-related or instance-specific error occurred while establishing a connection to SQL Server. The server was not found or was not accessible. Verify 
         }
 
         //[HttpPost("/api/[controller]/login")]

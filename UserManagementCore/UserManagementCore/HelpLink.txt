@@ -1,0 +1,77 @@
+﻿https://www.toptal.com/asp-dot-net/asp-net-web-api-tutorial
+
+https://thecodeblogger.com/2020/01/23/adding-asp-net-core-identity-to-web-api-project/
+
+Add NuGet Packages
+Please make sure you add below NuGet packages to the Web API Project:
+
+Microsoft.AspNetCore.Identity.EntityFrameworkCore
+Microsoft.EntityFrameworkCore
+Microsoft.EntityFrameworkCore.Design (this is important for runnig EF Core migrations commands)
+Microsoft.EntityFrameworkCore.SqlServer
+Microsoft.EntityFrameworkCore.Tools (if you want to install EF Core tools for NuGet Package Manager).
+
+https://docs.microsoft.com/en-us/aspnet/core/security/authentication/customize-identity-model?view=aspnetcore-6.0
+
+Lazy loading
+In this section, support for lazy-loading proxies in the Identity model is added. Lazy-loading is useful since it allows navigation properties to be used without first ensuring they're loaded.
+
+Entity types can be made suitable for lazy-loading in several ways, as described in the EF Core documentation. For simplicity, use lazy-loading proxies, which requires:
+
+Installation of the Microsoft.EntityFrameworkCore.Proxies package.
+A call to UseLazyLoadingProxies inside AddDbContext.
+Public entity types with public virtual navigation properties.
+The following example demonstrates calling UseLazyLoadingProxies in Startup.ConfigureServices:
+---------------------
+services
+    .AddDbContext<ApplicationDbContext>(
+        b => b.UseSqlServer(connectionString)
+              .UseLazyLoadingProxies())
+    .AddDefaultIdentity<ApplicationUser>()
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+Refer to the preceding examples for guidance on adding navigation properties to the entity types.
+
+/***************************************************************[ AUTOMETIC MIGRATION ] *********************************************************************************************/
+[Automated Migration in Entity Framework 6]
+https://www.entityframeworktutorial.net/code-first/automated-migration-in-code-first.aspx
+https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/automatic
+
+//HasKey declaration
+https://stackoverflow.com/questions/60766219/ef-core-3-1-identity-model-customization-what-did-i-do-wrong
+https://docs.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-6.0
+
+
+PM> add-migration CreateUserManagementDB
+PM> update-database –verbose
+
+/**************************************************************[CRUD]********************************************************/
+https://www.c-sharpcorner.com/article/crud-operation-in-asp-net-core-5-web-api/
+
+https://jasonwatmore.com/post/2019/12/27/aspnet-core-automatic-ef-core-migrations-to-sql-database-on-startup
+https://jasonwatmore.com/post/2019/10/14/aspnet-core-3-simple-api-for-authentication-registration-and-user-management#startup-cs
+
+https://stackoverflow.com/questions/38393907/database-databasename-already-exists-choose-a-different-database-name
+
+Seems like an instance of LocalDB is still running in the background. Execute the following commands in the console to stop and delete the instance.
+
+sqllocaldb stop
+sqllocaldb delete
+The Update-Database command should now have no problems.
+
+/******************************************MicroService Blog***************************************************/
+https://www.youtube.com/watch?v=4SBvcoe7-b0&list=PLEYpvDF6qy8YyX2dQX93C88mQ5alaWFXJ
+https://github.com/foyzulkarim/rbac-react-redux-aspnetcore
+
+/********************************************UNIT TEST*************************************************//
+https://learn.microsoft.com/en-us/aspnet/core/mvc/controllers/testing?view=aspnetcore-6.0
+
+/**************************************Difference between AddTransient ,AddScoped, AddSingleton*************************/
+https://www.c-sharpcorner.com/article/understanding-addtransient-vs-addscoped-vs-addsingleton-in-asp-net-core/
+
+QAndAnswer
+
+1. What is the difference ActionResult and IActionResult ?
+=> both can return all type data using return Ok . but for spacific data return we need to use ActionResult.  
+
+/***************************************** CQRS Pattern *****************************************************/
+https://www.c-sharpcorner.com/article/using-the-cqrs-pattern-in-c-sharp/
