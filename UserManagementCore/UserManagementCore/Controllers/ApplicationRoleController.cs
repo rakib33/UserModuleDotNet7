@@ -21,23 +21,6 @@ namespace UserManagementCore.Controllers
             _ApplicationRoleService = ApplicationRoleService;
             _logger = logger;
         }
-
-        [HttpGet("GetTask")]
-        public async Task<ActionResult> GetTask()  //IEnumerable<WeatherForecast>
-        {
-            //return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            //{
-            //    Date = DateTime.Now.AddDays(index),
-            //    TemperatureC = Random.Shared.Next(-20, 55),
-            //    Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            //})
-            //.ToArray();
-            List<TestItems> tems = new List<TestItems>();
-            tems.Add(new TestItems { id = 1, idk = "reactJs" });
-            tems.Add(new TestItems { id = 2, idk = "This is reactJs" });
-          //  return Ok(new { data = tems, message="This is Test Items" }); // data stored in testItems object 
-            return Ok( tems); // direct array render so in reactjs can catch this
-        }
         /// <summary>
         /// api/ApplicationRole 
         /// api/ApplicationRole/RoleList
