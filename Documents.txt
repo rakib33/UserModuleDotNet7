@@ -22,4 +22,5 @@ Overall, the key to identifying performance issues in .NET Core is to use a comb
 https://www.youtube.com/watch?v=Mhj36wE2CtU
 
 https://www.c-sharpcorner.com/article/asp-net-core-crud-with-reactjs-and-entity-framework-core/
-
+-----------------------CI/CD Jenkins-------------------------------------
+https://mahedee.net/configure-ci-cd-pipeline-with-jenkins-github-and-asp.net-core/

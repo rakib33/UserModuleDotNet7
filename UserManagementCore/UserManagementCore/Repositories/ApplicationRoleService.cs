@@ -83,20 +83,19 @@ namespace UserManagementCore.Repositories
                 return await _roleManager.Roles.Where(u => u.Id == roleId && u.Name == roleName)
                                                                         .Include(userRole => userRole.UserRoles)
                                                                         .Include(roleDetails => roleDetails.RoleDetails)
-                                                                        .Include(roleClaims => roleClaims.RoleClaims).FirstOrDefaultAsync();
+                                                                        .Include(roleClaims => roleClaims.RoleClaims).SingleAsync();
 
             else if (!string.IsNullOrEmpty(roleId))
                 return await _roleManager.Roles.Where(u => u.Id == roleId)
                                                                         .Include(userRole => userRole.UserRoles)
                                                                         .Include(roleDetails => roleDetails.RoleDetails)
-                                                                        .Include(roleClaims => roleClaims.RoleClaims).FirstOrDefaultAsync();
+                                                                        .Include(roleClaims => roleClaims.RoleClaims).SingleAsync();
             else if (!string.IsNullOrEmpty(roleName))
                 return await _roleManager.Roles.Where(u => u.Name == roleName)
                                                                         .Include(userRole => userRole.UserRoles)
                                                                         .Include(roleDetails => roleDetails.RoleDetails)
-                                                                        .Include(roleClaims => roleClaims.RoleClaims).FirstOrDefaultAsync();
-            else
-                return null;
+                                                                        .Include(roleClaims => roleClaims.RoleClaims).SingleAsync();
+            return new ApplicationRole(); //an empty application role.
         }
     }
 }

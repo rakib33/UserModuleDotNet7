@@ -1,4 +1,5 @@
-﻿using UserManagementCore.Contexts;
+﻿using Microsoft.EntityFrameworkCore;
+using UserManagementCore.Contexts;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 
@@ -40,7 +41,7 @@ namespace UserManagementCore.Repositories
 
         public ApplicationRoleDetails GetById(int Id)
         {
-            return _dbContext.RoleDetails.Where(x => x.Id == Id).FirstOrDefault();
+            return _dbContext.RoleDetails.Where(x => x.Id == Id).Single();
         }
 
         public void Update(ApplicationRoleDetails _object)

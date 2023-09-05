@@ -124,7 +124,7 @@ namespace UserManagementCore.Controllers
             {
                 return Ok(new { title = AppStatus.ErrorStatus, data = ex });
             }
-            return null;
+            
         }
 
         [HttpPut]
