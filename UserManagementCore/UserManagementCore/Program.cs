@@ -67,7 +67,9 @@ builder.Services.AddScoped<IApplicationRouteServices, ApplicationRouteServices>(
 builder.Services.AddScoped<IErrorHandler, ErrorHandler>();
 builder.Services.AddScoped<IUserRepository, UsersRepository>();
 builder.Services.AddScoped<IUserService, UsersService>();
+builder.Services.AddScoped<ILogins, LoginService>();
 builder.Services.AddTransient<MyActionFilters>();
+
 #endregion
 
 builder.Services.AddControllers();
