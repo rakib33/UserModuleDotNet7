@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserManagementCore.Controllers;
 using UserManagementCore.Interfaces;
+using UserManagementCore.Models;
 
 namespace UserManagementCore.Tests
 {
@@ -24,6 +25,7 @@ namespace UserManagementCore.Tests
             var httpContext = Mock.Of<HttpContext>(x => x.Session == session);
             _accessor = new Mock<IHttpContextAccessor>();
             _accessor.Setup(x => x.HttpContext).Returns(httpContext);
+            _loginsController = new LoginsController(_logins.Object, _accessor.Object);
         }
 
      
@@ -31,6 +33,15 @@ namespace UserManagementCore.Tests
         public void Index_ReturnLoginViewModel() 
         { 
          var result = (_loginsController.Index() as ViewResult);
+            Assert.NotNull(result);
+            Assert.Equal("Login",result.ViewName,ignoreCase:true);
+        }
+
+        [Fact]
+        public async Task Login_ModelStateIsValidTest_RetrurnLoginViewModel() 
+        { 
+         _loginsController.ModelState.AddModelError("Test","Test");
+            var result = await _loginsController.Login(Mock.Of<LoginViewModel>()) as ViewResult;
             Assert.NotNull(result);
             Assert.Equal("Login",result.ViewName,ignoreCase:true);
         }
