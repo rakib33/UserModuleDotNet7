@@ -10,9 +10,15 @@ namespace UserManagementCore.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<ApplicationUser> GetUser(string email)
+        public Task<ApplicationUser>? GetUser(string email)
         {
-            throw new NotImplementedException();
+            if (!string.IsNullOrEmpty(email))
+            {
+                ApplicationUser user = new ApplicationUser { Email = email, PasswordHash = "123" };
+                return Task.FromResult(user);
+            }
+            else
+                return null;
         }
     }
 }

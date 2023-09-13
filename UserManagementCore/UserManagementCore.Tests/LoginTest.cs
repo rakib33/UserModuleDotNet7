@@ -1,17 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UserManagementCore.Controllers;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 
 namespace UserManagementCore.Tests
 {
+
+    [Collection("Login")]
     public class LoginTest
     {
         private readonly Mock<IHttpContextAccessor> _accessor;
@@ -39,11 +36,61 @@ namespace UserManagementCore.Tests
 
         [Fact]
         public async Task Login_ModelStateIsValidTest_RetrurnLoginViewModel() 
-        { 
-         _loginsController.ModelState.AddModelError("Test","Test");
-            var result = await _loginsController.Login(Mock.Of<LoginViewModel>()) as ViewResult;
+        {
+            var expectedViewName = "Login";
+            var model = new LoginViewModel(); // Mock.Of<LoginViewModel>();
+            _loginsController.ModelState.AddModelError("Test","Test");
+            var result = await _loginsController.Login(model) as ViewResult;
             Assert.NotNull(result);
-            Assert.Equal("Login",result.ViewName,ignoreCase:true);
+            Assert.Equal(expectedViewName, result.ViewName,ignoreCase:true);
+            Assert.Equal(model,result.Model);
+        }
+
+    
+        [Fact]
+        public async Task Login_GivenCorrectPassword_RedirectToLoginAction()
+        {
+
+            var modelView = Mock.Of<LoginViewModel>(x => x.Email == "a@gmail.com" && x.Password == "123");
+            var model = Mock.Of<ApplicationUser>(x => x.PasswordHash == "123");
+
+            _logins.Setup(x => x.GetUser(It.IsAny<string>())).ReturnsAsync(model);
+
+            var result = await _loginsController.Login(modelView);
+
+            Assert.NotNull(result);
+            Assert.IsType<RedirectToActionResult>(result);
+        }
+
+        [Fact]
+        public async Task Login_GivenCorrectPassword_RedirectUrl()
+        {
+
+            var modelView = Mock.Of<LoginViewModel>(x => x.Email == "a@gmail.com" && x.Password == "123" && x.ReturnUrl=="abc.com");
+            var model = Mock.Of<ApplicationUser>(x => x.PasswordHash == "123");
+
+            _logins.Setup(x => x.GetUser(It.IsAny<string>())).ReturnsAsync(model);
+
+            var result = await _loginsController.Login(modelView);
+
+            Assert.NotNull(result);
+            Assert.IsType<RedirectResult>(result);
+        }
+
+        [Fact]
+        public async Task Login_GivenInvalidCredential_RedirectToLoginViewModel()
+        {
+            var expectedViewName = "Login";
+            var modelView = Mock.Of<LoginViewModel>(x => x.Email == "" && x.Password == "");
+            var model = Mock.Of<ApplicationUser>(x => x.PasswordHash == "123");
+
+            _logins.Setup(x => x.GetUser(It.IsAny<string>())).ReturnsAsync(model);
+
+            var result = await _loginsController.Login(modelView) as ViewResult;
+
+            Assert.NotNull(result);
+            Assert.Equal("Login", result.ViewName, ignoreCase: true);
+            Assert.Equal(modelView, result.Model);
         }
     }
 }

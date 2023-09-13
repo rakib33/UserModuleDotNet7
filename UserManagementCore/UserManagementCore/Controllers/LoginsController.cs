@@ -23,35 +23,43 @@ namespace UserManagementCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
+            /* [ [ TEST CASE METHOD ]-> Login_ModelStateIsValidTest_RetrurnLoginViewModel ] */         
             if (!ModelState.IsValid)
             {
                 ModelState.AddModelError("", "Invalid login detils");
                 return View("Login", model);
             }
+           
 
             var user = await _loginService.GetUser(model.Email);
             if (user != null)
-            {
+            {                
                 if (user.PasswordHash == model.Password)
                 {
-                    //ToDo: redirect to home page
+                    /* [ [ TEST CASE METHOD ]-> Login_GivenCorrectPassword_RedirectToLoginAction ] */
                     _httpContextAccessor.HttpContext.Session.SetString("User", model.Email);
                 }
-                else
+                else   /* [ [ TEST CASE METHOD ]-> Login_GivenInvalidCredential_RedirectToLoginAction ] */
                 {
                     ModelState.AddModelError("", "Invalid password");
                     return View("Login", model);
                 }
             }
+
+            /* [ [ TEST CASE METHOD ]-> Login_GivenInvalidCredential_RedirectToLoginAction ] */
             else
             {
                 ModelState.AddModelError("", "User was not found");
                 return View("Login", model);
             }
 
+
+            /* [ [ TEST CASE METHOD ]-> Login_GivenCorrectPassword_RedirectUrl ] */
             if (!string.IsNullOrEmpty(model.ReturnUrl))
                 return Redirect(model.ReturnUrl);
-            return RedirectToAction("Display", "Photos");
+
+            /* [ [ TEST CASE METHOD ]-> Login_GivenCorrectPassword_RedirectToLoginAction ] */
+            return RedirectToAction("Display", "Photos"); 
         }
 
         public IActionResult Create()
