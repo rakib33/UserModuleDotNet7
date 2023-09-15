@@ -44,31 +44,6 @@ namespace UserManagementCore.Tests
            // Assert.IsType<OkObjectResult>(actionResult as OkObjectResult);
         }
 
-        //[Fact]
-        //public async Task Get_AllRole_Return_Ok() 
-        //{
-
-        //    // Arrange
-        //    var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-        //    var roleName = "TestRole";
-
-        //    // Act
-        //    var result = roleManager.CreateAsync(new IdentityRole(roleName)).Result;
-
-        //    // Assert
-        //    Assert.IsTrue(result.Succeeded);
-        //    Assert.IsNotNull(roleManager.FindByNameAsync(roleName).Result);
-
-        //    //Act
-        //    var result = await _controller.Get();
-       
-        //    // Assert
-        //    var okResult = Assert.IsType<OkObjectResult>(result);
-        //    var response = Assert.IsType<Dictionary<string, object>>(okResult.Value);
-        //    Assert.Equal(AppStatus.SuccessStatus, response["title"]);
-
-        //    var data = Assert.IsType<List<ApplicationRole>>(response["data"]);
-        //    Assert.NotEmpty(data);
-        //}
+        
     }
 }

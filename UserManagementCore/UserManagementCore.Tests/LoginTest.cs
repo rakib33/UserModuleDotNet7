@@ -32,7 +32,7 @@ namespace UserManagementCore.Tests
         [Fact]
         public void Index_ReturnLoginViewModel() 
         { 
-         var result = (_loginsController.Index() as ViewResult);
+            var result = (_loginsController.Index() as ViewResult);
             Assert.NotNull(result);
             Assert.Equal("Login",result.ViewName,ignoreCase:true);
         }

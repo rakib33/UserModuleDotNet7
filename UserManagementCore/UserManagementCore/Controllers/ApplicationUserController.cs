@@ -11,6 +11,10 @@ using UserManagementEntityModel.ViewModel;
 
 namespace UserManagementCore.Controllers
 {
+    /// <summary>
+    /// [UNIT TEST] ->  https://code-maze.com/aspnetcore-identity-testing-usermanager-rolemanager/
+    /// </summary>
+
     [Route("api/[controller]")]
     [ApiController]
     public class ApplicationUserController : ControllerBase
