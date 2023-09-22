@@ -27,6 +27,8 @@ namespace UserManagementCore.Models
         public string PermanentAddress { get; set; }
 
         public string Designation { get; set; }
+        public string Occupation { get; set; }
+        public string Education { get; set; }
 
         public virtual string UserId { get; set; }
         public virtual ApplicationUser User { get; set; }

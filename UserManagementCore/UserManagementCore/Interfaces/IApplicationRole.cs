@@ -2,7 +2,7 @@
 
 namespace UserManagementCore.Interfaces
 {
-    public interface IApplicationRoleService
+    public interface IApplicationRole
     {
         public Task<IEnumerable<ApplicationRole>> GetOnlyRoleList();
         public Task<IEnumerable<ApplicationRole>> GetRoleList();

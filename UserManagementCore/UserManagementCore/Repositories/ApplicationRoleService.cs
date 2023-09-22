@@ -5,7 +5,7 @@ using UserManagementCore.Models;
 
 namespace UserManagementCore.Repositories
 {
-    public class ApplicationRoleService : IApplicationRoleService
+    public class ApplicationRoleService : IApplicationRole
     {
         private readonly RoleManager<ApplicationRole> _roleManager;
         public ApplicationRoleService(RoleManager<ApplicationRole> roleManager)

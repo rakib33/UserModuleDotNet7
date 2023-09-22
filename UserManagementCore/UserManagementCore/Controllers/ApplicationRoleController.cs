@@ -14,9 +14,9 @@ namespace UserManagementCore.Controllers
     public class ApplicationRoleController : ControllerBase
     {
 
-        private readonly IApplicationRoleService _ApplicationRoleService;
+        private readonly IApplicationRole _ApplicationRoleService;
         private readonly ILogger<ApplicationRoleController> _logger;   
-        public ApplicationRoleController(IApplicationRoleService ApplicationRoleService, ILogger<ApplicationRoleController> logger)
+        public ApplicationRoleController(IApplicationRole ApplicationRoleService, ILogger<ApplicationRoleController> logger)
         {
             _ApplicationRoleService = ApplicationRoleService;
             _logger = logger;

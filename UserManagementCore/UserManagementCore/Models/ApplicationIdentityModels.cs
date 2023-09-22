@@ -13,24 +13,24 @@ namespace UserManagementCore.Models
         [StringLength(20)]
         public string Tag { get; set; }
         public int LoginAttemptCount { get; set; }
-        public virtual ICollection<ApplicationUserClaim> Claims { get; set; }
-        public virtual ICollection<ApplicationUserLogin> Logins { get; set; }
-        public virtual ICollection<ApplicationUserToken> Tokens { get; set; }
-        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
+        public virtual ICollection<ApplicationUserClaim>? Claims { get; set; }
+        public virtual ICollection<ApplicationUserLogin>? Logins { get; set; }
+        public virtual ICollection<ApplicationUserToken>? Tokens { get; set; }
+        public virtual ICollection<ApplicationUserRole>? UserRoles { get; set; }
 
         //one to one relationship
-        public virtual ApplicationUserDetails UserDetails { get; set; }
+        public virtual ApplicationUserDetails?   UserDetails { get; set; }
     }
 
     public class ApplicationRole : IdentityRole
     {
         [StringLength(250)]
-        [Required]
-        public string Description { get; set; }
+       // [Required]
+        public string? Description { get; set; }
 
-        public virtual ICollection<ApplicationUserRole> UserRoles { get; set; }
-        public virtual ICollection<ApplicationRoleClaim> RoleClaims { get; set; }
-        public virtual ICollection<ApplicationRoleDetails> RoleDetails { get; set; }
+        public virtual ICollection<ApplicationUserRole>? UserRoles { get; set; }
+        public virtual ICollection<ApplicationRoleClaim>? RoleClaims { get; set; }
+        public virtual ICollection<ApplicationRoleDetails>? RoleDetails { get; set; }
     }
 
   

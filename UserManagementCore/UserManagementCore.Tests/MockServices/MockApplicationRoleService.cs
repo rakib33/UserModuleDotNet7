@@ -10,7 +10,7 @@ using UserManagementCore.Models;
 
 namespace UserManagementCore.Tests.MockServices
 {
-    public class MockApplicationRoleService : IApplicationRoleService
+    public class MockApplicationRoleService : IApplicationRole
     {
 
         private readonly RoleManager<ApplicationRole> _roleManager;

@@ -33,4 +33,10 @@
     <ProjectReference Include="..\UserManagementCore\UserManagementCore.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="MockData\" />
+    <Folder Include="Helper\" />
+    <Folder Include="ServicesTest\" />
+  </ItemGroup>
+
 </Project>
