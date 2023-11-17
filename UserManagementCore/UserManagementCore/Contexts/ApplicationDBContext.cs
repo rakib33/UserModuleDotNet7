@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using UserManagementCore.ModelConfigurations;
 using UserManagementCore.Models;
 
 namespace UserManagementCore.Contexts
@@ -8,13 +9,6 @@ namespace UserManagementCore.Contexts
            ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
            ApplicationRoleClaim, ApplicationUserToken>
     {
-
-        #region Enzan
-        //public DbSet<SiteMaster> SiteMasters { get; set; }
-        //public DbSet<CompanyMaster> CompanyMasters { get; set; }
-        //public DbSet<Company> Companies { get; set; }
-        #endregion
-
 
         public DbSet<ApplicationMenu> ApplicationMenus { get; set; }
         public DbSet<ApplicationRoleDetails> RoleDetails { get; set; }
@@ -26,17 +20,13 @@ namespace UserManagementCore.Contexts
         }
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //    optionsBuilder.UseSqlServer(@"Server=.\SQLEXPRESS;Database=SchoolDB;Trusted_Connection=True;");
+        //    optionsBuilder.UseSqlServer(@"Server=DESKTOP-OC677T4;Database=TestDB;Trusted_Connection=True;");
         //}
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             base.OnModelCreating(modelBuilder);
-
-            //enzan_model table
-            //modelBuilder.Entity<CompanyMaster>(b => { b.HasKey(l => l.company_id); b.ToTable("CompanyMaster"); });
-            //modelBuilder.Entity<SiteMaster>(b => { b.HasKey(l => l.site_id); b.ToTable("SiteMaster"); });
 
             modelBuilder.Entity<ApplicationUser>(b =>
             {
@@ -69,6 +59,7 @@ namespace UserManagementCore.Contexts
                 b.HasOne(e => e.UserDetails).WithOne(e => e.User).HasForeignKey<ApplicationUserDetails>(c => c.UserId);
 
             });
+
             modelBuilder.Entity<ApplicationUserClaim>(b =>
             {
                 b.ToTable("AppUserClaims");
@@ -85,6 +76,8 @@ namespace UserManagementCore.Contexts
                 b.HasKey(l => new { l.UserId, l.LoginProvider, l.Name });
                 b.ToTable("AppUserTokens");
             });
+
+
             modelBuilder.Entity<ApplicationRole>(b =>
             {
                 b.ToTable("AppRoles");
@@ -102,21 +95,22 @@ namespace UserManagementCore.Contexts
 
                 //Each Role can have many associated RoleDetails
                 b.HasMany(e => e.RoleDetails).WithOne(e => e.Role).HasForeignKey(rd => rd.RoleId).IsRequired();
-            });
+            });       
             //IdentityRoleClaim<string>
             modelBuilder.Entity<ApplicationRoleClaim>(b =>
             {
                 b.ToTable("AppRoleClaims");
             });
+
             //IdentityUserRole<string>
             modelBuilder.Entity<ApplicationUserRole>(b =>
             {
                 b.HasKey(l => new { l.UserId, l.RoleId });
                 b.ToTable("AppUserRoles");
             });
+
             modelBuilder.Entity<ApplicationRoleDetails>(b =>
             {
-                //b.HasOne<ApplicationRole>().WithMany().HasForeignKey(p=>p.Role);
                 b.ToTable("AppRoleDetails");
             });
             modelBuilder.Entity<ApplicationUserDetails>(b => {
@@ -127,10 +121,9 @@ namespace UserManagementCore.Contexts
                 b.ToTable("ApplicationMenu");
             });
 
-            //modelBuilder.Entity<Company>(b => {
-            //    b.HasKey(l => l.Id);
-            //    b.ToTable("Company");
-            //});
+            #region AddConfiguration
+           modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            #endregion
         }
     }
 }

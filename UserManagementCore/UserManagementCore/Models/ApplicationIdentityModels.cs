@@ -11,7 +11,7 @@ namespace UserManagementCore.Models
     public class ApplicationUser : IdentityUser
     {
         [StringLength(20)]
-        public string Tag { get; set; }
+        public string? Tag { get; set; }
         public int LoginAttemptCount { get; set; }
         public virtual ICollection<ApplicationUserClaim>? Claims { get; set; }
         public virtual ICollection<ApplicationUserLogin>? Logins { get; set; }
@@ -36,28 +36,28 @@ namespace UserManagementCore.Models
   
     public class ApplicationUserRole : IdentityUserRole<string>
     {
-        public virtual ApplicationUser User { get; set; }
-        public virtual ApplicationRole Role { get; set; }
+        public virtual ApplicationUser? User { get; set; }
+        public virtual ApplicationRole? Role { get; set; }
     }
 
     public class ApplicationUserClaim : IdentityUserClaim<string>
     {
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
 
     public class ApplicationUserLogin : IdentityUserLogin<string>
     {
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
 
     public class ApplicationRoleClaim : IdentityRoleClaim<string>
     {
-        public virtual ApplicationRole Role { get; set; }
+        public virtual ApplicationRole? Role { get; set; }
     }
 
     public class ApplicationUserToken : IdentityUserToken<string>
     {
-        public virtual ApplicationUser User { get; set; }
+        public virtual ApplicationUser? User { get; set; }
     }
     //public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string,
     //    ApplicationUserClaim, ApplicationUserRole, ApplicationUserLogin,
@@ -174,10 +174,12 @@ namespace UserManagementCore.Models
     //            //b.HasOne<ApplicationRole>().WithMany().HasForeignKey(p=>p.Role);
     //            b.ToTable("AppRoleDetails");
     //        });
-    //        modelBuilder.Entity<ApplicationUserDetails>(b => {
+    //        modelBuilder.Entity<ApplicationUserDetails>(b =>
+    //        {
     //            b.ToTable("AppUserDetails");
     //        });
-    //        modelBuilder.Entity<ApplicationMenu>(b => {
+    //        modelBuilder.Entity<ApplicationMenu>(b =>
+    //        {
     //            b.HasKey(l => l.Id);
     //            b.ToTable("ApplicationMenu");
     //        });

@@ -29,9 +29,12 @@ namespace UserManagementCore.Repositories
         {
             try
             {
-                return await _roleManager.Roles.Include(userRole => userRole.UserRoles)
-                                                                       .Include(roleDetails => roleDetails.RoleDetails)
-                                                                       .Include(roleClaims => roleClaims.RoleClaims).ToListAsync();
+                var RoleList = await _roleManager.Roles.ToListAsync();
+                //return await _roleManager.Roles.Include(userRole => userRole.UserRoles)
+                //                                                       .Include(roleDetails => roleDetails.RoleDetails)
+                //                                                       .Include(roleClaims => roleClaims.RoleClaims).ToListAsync();
+
+                return RoleList;
             }            
             catch (Exception ex)
             {

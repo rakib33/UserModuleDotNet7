@@ -60,15 +60,5 @@ namespace UserManagementCore.Repositories
         {
             await _roleManager.DeleteAsync(await GetRole(roleId));
         }
-
-        Task<IdentityRole> IApplicationRolesRepository.GetRole(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        Task<IdentityRole> IApplicationRolesRepository.GetRole(Guid roleId)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

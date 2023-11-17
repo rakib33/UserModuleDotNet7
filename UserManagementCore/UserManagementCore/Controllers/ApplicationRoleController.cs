@@ -27,7 +27,7 @@ namespace UserManagementCore.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [HttpGet("RoleList")]
+        [HttpGet("get-role-list")]
         [ResponseCache(Duration = 60)] //60 sec
        // [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         [ServiceFilter(typeof(MyActionFilters))]

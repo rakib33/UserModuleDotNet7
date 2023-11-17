@@ -4,6 +4,7 @@ using Moq;
 using UserManagementCore.Controllers;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
+using Xunit;
 
 namespace UserManagementCore.Tests
 {

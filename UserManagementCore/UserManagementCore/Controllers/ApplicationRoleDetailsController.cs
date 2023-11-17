@@ -25,7 +25,7 @@ namespace UserManagementCore.Controllers
             _UserManagementService = UserManagementService;
             _logger = logger;
         }
-        //Add Person  
+
         [HttpPost("AddRoleDetails")]
         public async Task<Object> AddRoleDetails([FromBody] ApplicationRoleDetails roleDetails)
         {
@@ -41,7 +41,7 @@ namespace UserManagementCore.Controllers
                 return false;
             }
         }
-        //Delete Person  
+    
         [HttpDelete("DeleteRoleDetails")]
         public bool DeleteRoleDetails(int id)
         {

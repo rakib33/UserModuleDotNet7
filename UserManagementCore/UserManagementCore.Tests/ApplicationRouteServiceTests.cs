@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserManagementCore.Models;
 using UserManagementCore.Repositories;
+using Xunit;
 
 namespace UserManagementCore.Tests
 {
