@@ -18,10 +18,11 @@ namespace UserManagementCore.Contexts
         {
 
         }
-        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        //{
-        //    optionsBuilder.UseSqlServer(@"Server=DESKTOP-OC677T4;Database=TestDB;Trusted_Connection=True;");
-        //}
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseLazyLoadingProxies(); // Enable lazy loading proxies
+            // optionsBuilder.UseSqlServer(@"Server=DESKTOP-OC677T4;Database=TestDB;Trusted_Connection=True;");
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
