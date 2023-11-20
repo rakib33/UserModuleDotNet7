@@ -33,8 +33,12 @@ Refer to the preceding examples for guidance on adding navigation properties to 
 
 /***************************************************************[ AUTOMETIC MIGRATION ] *********************************************************************************************/
 [Automated Migration in Entity Framework 6]
-https://www.entityframeworktutorial.net/code-first/automated-migration-in-code-first.aspx
-https://docs.microsoft.com/en-us/ef/ef6/modeling/code-first/migrations/automatic
+https://learn.microsoft.com/en-us/ef/core/managing-schemas/migrations/?tabs=vs
+Add-Migration InitialCreate
+Update-Database
+#After change any model
+Add-Migration AddBlogCreatedTimestamp
+Update-Database
 
 //HasKey declaration
 https://stackoverflow.com/questions/60766219/ef-core-3-1-identity-model-customization-what-did-i-do-wrong
