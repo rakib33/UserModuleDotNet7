@@ -32,7 +32,11 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
          errorNumbersToAdd: null);
     }));
- 
+//using (var scope = builder.Services.CreateScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<SomeDbContext>();
+//    db.Database.Migrate();
+//}
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
