@@ -79,3 +79,36 @@ QAndAnswer
 
 /***************************************** CQRS Pattern *****************************************************/
 https://www.c-sharpcorner.com/article/using-the-cqrs-pattern-in-c-sharp/
+
+Checkout the branch you want to merge into:
+
+bash
+Copy code
+git checkout branch2
+Merge the other branch into the current branch:
+
+bash
+Copy code
+git merge branch1
+If there are no conflicts, Git will automatically perform the merge, and you'll see a message indicating the merge was successful.
+
+If there are conflicts, Git will mark the conflicted files, and you'll need to resolve the conflicts manually. After resolving conflicts, you can continue the merge with:
+
+bash
+Copy code
+git merge --continue
+Or you can abort the merge with:
+
+bash
+Copy code
+git merge --abort
+Push the changes to the remote repository (if applicable):
+
+bash
+Copy code
+git push origin branch2
+These commands assume you are merging branches locally. If you want to merge branches on a remote repository, you might need to push the changes to the remote repository after the merge.
+
+Keep in mind that merging should be done carefully, especially when dealing with changes in different branches. It's a good practice to review the changes and possibly test the merged code before pushing it to a shared repository.
+
+Please replace branch1 and branch2 with the actual branch names you are working with.

@@ -24,6 +24,7 @@ namespace UserManagementCore.Models
 
     public class ApplicationRole : IdentityRole
     {
+      
         [StringLength(250)]
        // [Required]
         public string? Description { get; set; }

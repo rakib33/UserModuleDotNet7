@@ -17,11 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 
 #region Add_DI_ApplicationServices
-//Add services to the container.
-//builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
-//JWT barier token
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer();
+
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -32,11 +28,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
             maxRetryDelay: TimeSpan.FromSeconds(5),
          errorNumbersToAdd: null);
     }));
-//using (var scope = builder.Services.CreateScope())
-//{
-//    var db = scope.ServiceProvider.GetRequiredService<SomeDbContext>();
-//    db.Database.Migrate();
-//}
+
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins",
@@ -55,6 +48,16 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opts => {
     })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
+
+
+//Adding authentication
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+});
+
 
 //Add Mapping
 builder.Services.AddAutoMapper(typeof(MapperConfig));
@@ -96,13 +99,13 @@ try
     app.UseCors("AllowAllOrigins");
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
-{
+    {
     app.UseSwagger();
     app.UseSwaggerUI();
-}
+    }
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 
