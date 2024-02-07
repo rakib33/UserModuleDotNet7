@@ -60,7 +60,39 @@ namespace UserManagementCore.Tests.ControllersTest
             _userManager.Verify(m => m.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()), Times.Once);
             _roleManager.Verify(m => m.RoleExistsAsync(It.IsAny<string>()), Times.Once);
             _configuration.VerifyGet(x => x["DefaultRole"], Times.AtLeastOnce);
+
         }
 
+        [Fact]
+        public async Task RegisterUser_SuccessfulRegistration_Returns201Created()
+        {
+            // Arrange
+            var userManagerMock = new Mock<UserManager<ApplicationUser>>(/* pass required parameters */);
+            var roleManagerMock = new Mock<RoleManager<ApplicationRole>>(/* pass required parameters */);
+            var configurationMock = new Mock<IConfiguration>();
+
+            userManagerMock.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync((ApplicationUser)null);
+            userManagerMock.Setup(x => x.CreateAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+            userManagerMock.Setup(x => x.AddToRoleAsync(It.IsAny<ApplicationUser>(), It.IsAny<string>()))
+                .ReturnsAsync(IdentityResult.Success);
+
+            roleManagerMock.Setup(x => x.RoleExistsAsync(It.IsAny<string>())).ReturnsAsync(true);
+
+            var authenticationController = new AuthenticationController(
+                userManagerMock.Object,
+                roleManagerMock.Object,
+                configurationMock.Object
+            );
+
+            // Act
+            var registerUser = new RegisterUser { /* set properties */ };
+            var result = await authenticationController.RegisterUser(registerUser, "Visitor");
+
+            // Assert
+            Assert.IsType<StatusCodeResult>(result);
+            var statusCodeResult = (StatusCodeResult)result;
+            Assert.Equal(StatusCodes.Status201Created, statusCodeResult.StatusCode);
+        }
     }
 }

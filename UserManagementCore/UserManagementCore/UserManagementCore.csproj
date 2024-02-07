@@ -42,4 +42,8 @@
     <ProjectReference Include="..\..\UserManagementEntityModel\UserManagementEntityModel.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Authentication\" />
+  </ItemGroup>
+
 </Project>

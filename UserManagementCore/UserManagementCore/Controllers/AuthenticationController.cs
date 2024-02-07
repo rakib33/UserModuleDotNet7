@@ -23,7 +23,7 @@ namespace UserManagementCore.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RegisterUser([FromBody]RegisterUser registerUser, string role=null) 
+        public async Task<IActionResult> RegisterUser([FromBody]RegisterUser registerUser, string role) 
         {
             //Check user exits
             var userExits = await _userManager.FindByEmailAsync(registerUser.Email);
@@ -58,7 +58,7 @@ namespace UserManagementCore.Controllers
 
                 // Assigning the user to the role
                 await _userManager.AddToRoleAsync(user, roleName);
-                return StatusCode(StatusCodes.Status201Created, new Response { Status = "Success", Message = "User Created Successfully!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = "User Created Successfully!" });
             }
             else
             {
