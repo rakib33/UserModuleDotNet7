@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Web;
+using UserManagement.Service.Models;
+using UserManagement.Service.Services;
 using UserManagementCore.Contexts;
 using UserManagementCore.DataContext;
 using UserManagementCore.Filters;
@@ -86,7 +88,10 @@ builder.Services.AddScoped<IUserService, UsersService>();
 builder.Services.AddScoped<ILogins, LoginService>();
 builder.Services.AddTransient<MyActionFilters>();
 
+var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 #endregion
+
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
