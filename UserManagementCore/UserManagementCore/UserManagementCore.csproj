@@ -40,6 +40,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\UserManagementEntityModel\UserManagementEntityModel.csproj" />
+    <ProjectReference Include="..\UserManagement.Service\UserManagement.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
