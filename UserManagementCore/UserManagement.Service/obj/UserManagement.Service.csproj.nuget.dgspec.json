@@ -49,6 +49,10 @@
             "MailKit": {
               "target": "Package",
               "version": "[4.3.0, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
             }
           },
           "imports": [

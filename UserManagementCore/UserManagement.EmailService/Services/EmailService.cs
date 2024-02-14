@@ -1,9 +1,9 @@
 ﻿using MailKit.Net.Smtp;
 using MimeKit;
 
-using UserManagement.Service.Models;
+using UserManagement.EmailService.Models;
 
-namespace UserManagement.Service.Services
+namespace UserManagement.EmailService.Services
 {
     public class EmailService : IEmailService
     {
@@ -30,25 +30,31 @@ namespace UserManagement.Service.Services
 
         private void Send(MimeMessage message)
         {
+    
+                using var client = new SmtpClient();
+            //using (var client = new SmtpClient())
+            //{
             try
             {
-                using (var client = new SmtpClient())
-                {
-                    // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
-                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
+              //  client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-                    client.Connect("smtp.server.com", 587, false);
-
-                    // Note: only needed if the SMTP server requires authentication
-                    client.Authenticate("username", "password");
-
+                  //  client.Connect("smtp.server.com", 587, false);
+                    client.Connect(_emailConfiguration.SmtpServer,_emailConfiguration.Port, true);
+                    client.AuthenticationMechanisms.Remove("XOAUTH2");
+                    client.Authenticate(_emailConfiguration.UserName,_emailConfiguration.Password);
+                   
                     client.Send(message);
-                    client.Disconnect(true);
-                }
+       
+              //  }
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw;
+            }
+            finally {
+                client.Disconnect(true);
+                client.Dispose(); 
             }
         }
     }

@@ -5,3 +5,5 @@ UserManagementEntityModel/bin/
 UserManagementEntityModel/obj/
 UserManagementCore/UserManagementCore.Tests/bin/
 UserManagementCore/UserManagementCore.Tests/obj/
+UserManagementCore/UserManagement.EmailService/obj/
+UserManagementCore/UserManagement.EmailService/bin/

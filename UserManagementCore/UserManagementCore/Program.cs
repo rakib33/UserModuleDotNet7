@@ -2,11 +2,12 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Web;
-using UserManagement.Service.Models;
-using UserManagement.Service.Services;
+
+
+using UserManagement.EmailService.Models;
+using UserManagement.EmailService.Services;
 using UserManagementCore.Contexts;
-using UserManagementCore.DataContext;
+
 using UserManagementCore.Filters;
 using UserManagementCore.Infrastructure.ErrorHandler;
 using UserManagementCore.Infrastructure.Mapper;
@@ -88,6 +89,7 @@ builder.Services.AddScoped<IUserService, UsersService>();
 builder.Services.AddScoped<ILogins, LoginService>();
 builder.Services.AddTransient<MyActionFilters>();
 
+//Add email Config
 var emailConfig = builder.Configuration.GetSection("EmailConfiguration").Get<EmailConfiguration>();
 builder.Services.AddSingleton(emailConfig);
 builder.Services.AddScoped<IEmailService, EmailService>();

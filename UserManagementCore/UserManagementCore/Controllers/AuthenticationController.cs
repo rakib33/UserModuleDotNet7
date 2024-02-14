@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using UserManagement.EmailService.Models;
+using UserManagement.EmailService.Services;
 using UserManagementCore.Common;
 using UserManagementCore.Models;
 
@@ -12,14 +14,16 @@ namespace UserManagementCore.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        private readonly IConfiguration _configuration;
+        // private readonly IConfiguration _configuration;
 
+        private readonly IEmailService _emailService;
         public AuthenticationController(UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager, IConfiguration configuration)
+            RoleManager<ApplicationRole> roleManager, IEmailService emailService)
         {
             _userManager = userManager;
             _roleManager = roleManager;
-            _configuration = configuration;
+            _emailService = emailService;
+           // _configuration = configuration;
         }
 
         [HttpPost]
@@ -67,6 +71,16 @@ namespace UserManagementCore.Controllers
           
 
         }
-        
+
+        [HttpGet]
+        public IActionResult TestEmail()
+        {
+            var message = new Message(new string[] { "islam.rakibul@bjitgroup.com" }, "Test", "<h1>Subscribe to my channel!</h1>");
+          
+            _emailService.SendMail(message);
+            return StatusCode(StatusCodes.Status200OK,new Response { Status ="Success",Message="Email sent successfully."});
+        }
+
+
     }
 }
