@@ -1,10 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using UserManagement.EmailService.Models;
 using UserManagement.EmailService.Services;
 using UserManagementCore.Common;
 using UserManagementCore.Models;
+using UserManagementEntityModel.Models.Authentication.Login;
+using UserManagementEntityModel.Models.Authentication.SignUp;
 
 namespace UserManagementCore.Controllers
 {
@@ -15,16 +20,17 @@ namespace UserManagementCore.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
-        // private readonly IConfiguration _configuration;
+         private readonly IConfiguration _configuration;
 
         private readonly IEmailService _emailService;
         public AuthenticationController(UserManager<ApplicationUser> userManager,
-            RoleManager<ApplicationRole> roleManager, IEmailService emailService)
+            RoleManager<ApplicationRole> roleManager, IEmailService emailService,
+            IConfiguration configuration)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailService = emailService;
-           // _configuration = configuration;
+            _configuration = configuration;
         }
 
         [HttpPost]
@@ -68,8 +74,14 @@ namespace UserManagementCore.Controllers
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                 var confirmationLink = Url.Action(nameof(ConfirmEmail), "Authentication", new { token, email = user.Email }, Request.Scheme);
                 var message = new Message(new string[] { user.Email }, "Confirmation email link", confirmationLink!);
-                _emailService.SendMail(message);
-
+                try
+                {
+                    _emailService.SendMail(message);
+                }
+                catch(Exception ex)
+                {
+                    string msg = ex.Message;
+                }
                 return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"User Created & Email Sent to {user.Email} Successfully!" });
             }
             else
@@ -103,6 +115,56 @@ namespace UserManagementCore.Controllers
             }
 
             return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "This user Doesnot exist!" });
+        }
+
+        [HttpPost]
+        [Route("login")]
+        public async Task<IActionResult> Login([FromBody] LoginModel loginModel)
+        {
+            // checking the user
+            var user = await _userManager.FindByNameAsync(loginModel.Username);
+
+            //checking the password
+            if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
+            {
+                //claimlist creation
+                var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+                //we add roles to the user
+                var userRoles = await _userManager.GetRolesAsync(user);
+                foreach(var role in userRoles)
+                {
+                    authClaims.Add(new Claim(ClaimTypes.Role,role));
+                }
+                //generates the token with the claims
+                 var jwtToken = GetToken(authClaims);
+                //returning the token
+
+                return Ok(new { 
+                 token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                 expiration= jwtToken.ValidTo
+                });
+            }
+
+            return Unauthorized();
+        }
+
+        private JwtSecurityToken GetToken(List<Claim> authClaims) 
+        {
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
+            var token = new JwtSecurityToken(
+                                issuer: _configuration["JwtSettings:ValidIssuer"],
+                                audience: _configuration["JwtSettings:ValidAudience"],
+                                notBefore:DateTime.UtcNow, //Valid from this moment
+                                expires: DateTime.UtcNow.AddHours(3),
+                                claims: authClaims,
+                                signingCredentials: new SigningCredentials(authSigningKey,SecurityAlgorithms.HmacSha256)
+                );
+
+            return token;
         }
 
     }

@@ -2,22 +2,20 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
-
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using UserManagement.EmailService.Models;
 using UserManagement.EmailService.Services;
 using UserManagementCore.Contexts;
-
 using UserManagementCore.Filters;
 using UserManagementCore.Infrastructure.ErrorHandler;
 using UserManagementCore.Infrastructure.Mapper;
 using UserManagementCore.Interfaces;
 using UserManagementCore.Models;
 using UserManagementCore.Repositories;
+using UserManagementEntityModel.Models.Authentication.JWTToken;
 
 var builder = WebApplication.CreateBuilder(args);
-//var connectionString = System.Configuration.GetConnectionString("DefaultConnection");
-
 
 #region Add_DI_ApplicationServices
 
@@ -52,6 +50,10 @@ builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(opts => {
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 
+#region Configure JWT authentication
+
+var jwtSettings = builder.Configuration.GetSection("JwtSettings").Get<JwtSettings>();
+var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
 
 //Adding authentication
 builder.Services.AddAuthentication(options =>
@@ -59,7 +61,22 @@ builder.Services.AddAuthentication(options =>
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+}).AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtSettings.ValidIssuer,
+        IssuerSigningKey = new SymmetricSecurityKey(key)
+    };
 });
+
+
+#endregion
+
 
 
 //Add Mapping
@@ -71,11 +88,6 @@ builder.Services.AddControllers(options => {
 });
 /* [Caching]*/
 builder.Services.AddResponseCaching();
-
-// TODO: Inject custom validation 
-// services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
-// services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
-
 
 builder.Services.AddScoped<IRepository<ApplicationRoleDetails>, RepositoryRoleDetails>();
 builder.Services.AddScoped<IApplicationRole, ApplicationRoleService>();
@@ -118,6 +130,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseCors(x=>x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 
 app.Run();
 }
