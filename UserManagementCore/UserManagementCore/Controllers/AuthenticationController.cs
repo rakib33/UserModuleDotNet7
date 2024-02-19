@@ -145,7 +145,9 @@ namespace UserManagementCore.Controllers
 
                 return Ok(new { 
                  token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                 expiration= jwtToken.ValidTo
+                 expirationUtcFrom = jwtToken.ValidFrom, expirationUtcTo = jwtToken.ValidTo ,
+                 expirationLocalTimeFrom = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidFrom),
+                 expirationLocalTimeTo = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidTo)
                 });
             }
 
@@ -160,7 +162,7 @@ namespace UserManagementCore.Controllers
                                 audience: _configuration["JwtSettings:ValidAudience"],
                                 notBefore:DateTime.UtcNow, //Valid from this moment
                                 expires: DateTime.UtcNow.AddHours(3),
-                                claims: authClaims,
+                                claims: authClaims,                                
                                 signingCredentials: new SigningCredentials(authSigningKey,SecurityAlgorithms.HmacSha256)
                 );
 
