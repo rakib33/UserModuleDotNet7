@@ -145,10 +145,11 @@ namespace UserManagementCore.Controllers
 
                 return Ok(new { 
                  token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
-                 expirationUtcFrom = jwtToken.ValidFrom, expirationUtcTo = jwtToken.ValidTo ,
-                 expirationLocalTimeFrom = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidFrom),
-                 expirationLocalTimeTo = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidTo)
+                expiration = jwtToken.ValidTo
                 });
+                //expirationUtcFrom = jwtToken.ValidFrom, expirationUtcTo = jwtToken.ValidTo ,
+                // expirationLocalTimeFrom = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidFrom),
+                // expirationLocalTimeTo = TimeZone.CurrentTimeZone.ToLocalTime(jwtToken.ValidTo)
             }
 
             return Unauthorized();
@@ -156,12 +157,12 @@ namespace UserManagementCore.Controllers
 
         private JwtSecurityToken GetToken(List<Claim> authClaims) 
         {
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Secret"]));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
-                                issuer: _configuration["JwtSettings:ValidIssuer"],
-                                audience: _configuration["JwtSettings:ValidAudience"],
-                                notBefore:DateTime.UtcNow, //Valid from this moment
-                                expires: DateTime.UtcNow.AddHours(3),
+                                issuer: _configuration["JWT:ValidIssuer"],
+                                audience: _configuration["JWT:ValidAudience"],
+                                notBefore:DateTime.Now, //Valid from this moment
+                                expires: DateTime.Now.AddHours(1),
                                 claims: authClaims,                                
                                 signingCredentials: new SigningCredentials(authSigningKey,SecurityAlgorithms.HmacSha256)
                 );
