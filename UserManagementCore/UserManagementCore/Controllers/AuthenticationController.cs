@@ -54,7 +54,8 @@ namespace UserManagementCore.Controllers
             if(result.Succeeded)
             {
                 // Your role creation logic (replace with actual role name)
-                var roleName = "Visitor";
+              //  var roleName = "Visitor";
+                var roleName = "Administrator";
 
                 // Creating the role if it doesn't exist
                 var roleExist = await _roleManager.RoleExistsAsync(roleName);
