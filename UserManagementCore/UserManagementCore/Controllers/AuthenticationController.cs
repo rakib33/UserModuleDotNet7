@@ -14,23 +14,26 @@ using UserManagementEntityModel.Models.Authentication.SignUp;
 namespace UserManagementCore.Controllers
 {
     //https://www.youtube.com/watch?v=J8pxfxLF41g&list=PLX4n-znUpc2b19AoYa4BMuhGuRnZItJK_&index=2
+    //https://github.com/dotnet/aspnetcore/blob/main/src/Identity/Core/src/SignInManager.cs
     [Route("api/[controller]")]
     [ApiController]
     public class AuthenticationController : ControllerBase
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
          private readonly IConfiguration _configuration;
 
         private readonly IEmailService _emailService;
         public AuthenticationController(UserManager<ApplicationUser> userManager,
             RoleManager<ApplicationRole> roleManager, IEmailService emailService,
-            IConfiguration configuration)
+            IConfiguration configuration, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _emailService = emailService;
             _configuration = configuration;
+            _signInManager = signInManager;
         }
 
         [HttpPost]
@@ -47,7 +50,8 @@ namespace UserManagementCore.Controllers
             {
                 Email = registerUser.Email,
                 SecurityStamp = Guid.NewGuid().ToString(),
-                UserName = registerUser.UserName
+                UserName = registerUser.UserName,
+                TwoFactorEnabled = true
             };
 
             IdentityResult result = await _userManager.CreateAsync(user, registerUser.Password);
@@ -124,7 +128,18 @@ namespace UserManagementCore.Controllers
         {
             // checking the user
             var user = await _userManager.FindByNameAsync(loginModel.Username);
+         
+            if (user.TwoFactorEnabled)
+            {
+                await _signInManager.SignOutAsync();
+               var result =  await _signInManager.PasswordSignInAsync(user,loginModel.Password,true,lockoutOnFailure:true);
 
+                var token = await _userManager.GenerateTwoFactorTokenAsync(user, "Email");
+
+                var message = new Message(new string[] { user.Email! }, "OTP Confirmation", token);
+                _emailService.SendMail(message);
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = AppStatus.SuccessStatus, Message = $"We have sent an OTP to your Email {user.Email}" });
+            }
             //checking the password
             if (user != null && await _userManager.CheckPasswordAsync(user, loginModel.Password))
             {
@@ -140,6 +155,7 @@ namespace UserManagementCore.Controllers
                 {
                     authClaims.Add(new Claim(ClaimTypes.Role,role));
                 }
+            
                 //generates the token with the claims
                  var jwtToken = GetToken(authClaims);
                 //returning the token
@@ -156,7 +172,46 @@ namespace UserManagementCore.Controllers
             return Unauthorized();
         }
 
-        private JwtSecurityToken GetToken(List<Claim> authClaims) 
+
+        [HttpPost]
+        [Route("login-2FA")]
+        public async Task<IActionResult> LoginWithOTP(string code, string userName)
+        {
+            var user = await _userManager.FindByNameAsync(userName);
+            var result = await _signInManager.TwoFactorSignInAsync("Email", code, false,rememberClient:false);
+            if (result.Succeeded)
+            {
+             
+                if (user != null)
+                {
+                    //claimlist creation
+                    var authClaims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+                    //we add roles to the user
+                    var userRoles = await _userManager.GetRolesAsync(user);
+                    foreach (var role in userRoles)
+                    {
+                        authClaims.Add(new Claim(ClaimTypes.Role, role));
+                    }
+
+                    //generates the token with the claims
+                    var jwtToken = GetToken(authClaims);
+                    //returning the token
+
+                    return Ok(new
+                    {
+                        token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                        expiration = jwtToken.ValidTo
+                    });                
+                }
+            }
+            return StatusCode(StatusCodes.Status404NotFound,
+                new Response { Status = AppStatus.SuccessStatus, Message = $"Invalid code" });
+        }
+            private JwtSecurityToken GetToken(List<Claim> authClaims) 
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
