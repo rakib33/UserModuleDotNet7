@@ -56,10 +56,13 @@ builder.Services.Configure<IdentityOptions>(
     opts=> opts.SignIn.RequireConfirmedEmail = true
     );
 
+
 #region Configure JWT authentication
 
 var jwtSettings = builder.Configuration.GetSection("JWT").Get<JwtSettings>();
-//var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+//Token or link life time
+builder.Services.Configure<DataProtectionTokenProviderOptions>(opts => opts.TokenLifespan = TimeSpan.FromHours(10));
 
 //Adding authentication
 builder.Services.AddAuthentication(options =>
