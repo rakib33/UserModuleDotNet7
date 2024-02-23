@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.ComponentModel.DataAnnotations;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -9,6 +11,7 @@ using UserManagement.EmailService.Services;
 using UserManagementCore.Common;
 using UserManagementCore.Models;
 using UserManagementEntityModel.Models.Authentication.Login;
+using UserManagementEntityModel.Models.Authentication.Password;
 using UserManagementEntityModel.Models.Authentication.SignUp;
 
 namespace UserManagementCore.Controllers
@@ -87,25 +90,17 @@ namespace UserManagementCore.Controllers
                 {
                     string msg = ex.Message;
                 }
-                return StatusCode(StatusCodes.Status200OK, new Response { Status = "Success", Message = $"User Created & Email Sent to {user.Email} Successfully!" });
+                return StatusCode(StatusCodes.Status200OK, new Response { Status = AppStatus.SuccessStatus, Message = $"User Created & Email Sent to {user.Email} Successfully!" });
             }
             else
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = "Error", Message = "User Failed to Create", Errors= result.Errors });
+                return StatusCode(StatusCodes.Status500InternalServerError, new Response { Status = AppStatus.ErrorStatus, Message = "User Failed to Create", Errors= result.Errors });
             }
           
 
         }
 
-        [HttpGet]
-        public IActionResult TestEmail()
-        {
-            var message = new Message(new string[] { "islam.rakibul@bjitgroup.com" }, "Test", "<h1>Subscribe to my channel!</h1>");
-          
-            _emailService.SendMail(message);
-            return StatusCode(StatusCodes.Status200OK,new Response { Status ="Success",Message="Email sent successfully."});
-        }
-
+      
         [HttpGet("ConfirmEmail")]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
@@ -211,7 +206,73 @@ namespace UserManagementCore.Controllers
             return StatusCode(StatusCodes.Status404NotFound,
                 new Response { Status = AppStatus.SuccessStatus, Message = $"Invalid code" });
         }
-            private JwtSecurityToken GetToken(List<Claim> authClaims) 
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([Required] string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user != null)
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var forgotPasswordLink = Url.Action("ResetPassword", "Authentication", new { token, email = user.Email }, Request.Scheme);
+
+                var message = new Message(new string[] { user.Email }, "Confirmation email link", forgotPasswordLink!);
+                try
+                {
+                    _emailService.SendMail(message);
+                    return StatusCode(StatusCodes.Status200OK,
+                        new Response { Status = AppStatus.SuccessStatus, Message = $"Password Changed request is sent on Email {user.Email}. Please Open your email & click the link !" });
+                }catch (Exception)
+                {
+                    //add log file
+                }
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                new Response { Status = AppStatus.ErrorStatus, Message = $"Couldnot sent link to email. Please try again." });
+        }
+
+
+        [HttpGet("reset-password")]
+        public async Task<IActionResult> ResetPassword(string token, string email)
+        {
+            var model = new ResetPassword { Token= token, Email = email };
+
+            return Ok(new { model });
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPassword resetPassword)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user != null)
+            {
+                var reserPassResult = await _userManager.ResetPasswordAsync(user,resetPassword.Token,resetPassword.Password);
+                  
+                if(!reserPassResult.Succeeded)
+                {
+                    foreach(var error  in reserPassResult.Errors)
+                    {
+                        ModelState.AddModelError(error.Code, error.Description);
+                    }
+
+                    return Ok(ModelState);
+                }
+                await _signInManager.SignOutAsync();
+                return StatusCode(StatusCodes.Status200OK,
+                        new Response { Status = AppStatus.SuccessStatus, Message = $"Password has been changed.Please sign in." });
+          
+            }
+
+            return StatusCode(StatusCodes.Status400BadRequest,
+                new Response { Status = AppStatus.ErrorStatus, Message = $"Couldnot sent link to email. Please try again." });
+        }
+        private JwtSecurityToken GetToken(List<Claim> authClaims) 
         {
             var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
