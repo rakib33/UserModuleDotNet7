@@ -78,7 +78,6 @@ namespace UserManagementCore.Contexts
                 b.ToTable("AppUserTokens");
             });
 
-
             modelBuilder.Entity<ApplicationRole>(b =>
             {
                 b.ToTable("AppRoles");
